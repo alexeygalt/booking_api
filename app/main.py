@@ -1,6 +1,7 @@
 import time
 from contextlib import asynccontextmanager
 import sentry_sdk
+from prometheus_fastapi_instrumentator import Instrumentator
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -28,6 +29,13 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+instrumentator = Instrumentator(
+    should_group_status_codes=False,
+    excluded_handlers=[".*admin.*", "metrics"],
+)
+
+instrumentator.instrument(app).expose(app)
 
 app.mount("/static", StaticFiles(directory="app/static"), "static")
 
@@ -75,7 +83,7 @@ async def add_process_time_header(request: Request, call_next):
 
 
 sentry_sdk.init(
-    dsn="https://97b8ebe84db6964e17aed16e06057b6d@o4506353416929280.ingest.sentry.io/4506353443667968",
+    dsn=settings.SENTRY_DNS,
     traces_sample_rate=1.0,
     profiles_sample_rate=1.0,
 )
