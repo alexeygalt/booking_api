@@ -1,21 +1,19 @@
 from datetime import date
-from typing import Optional
-
 from fastapi import APIRouter, Depends
-from fastapi_cache.decorator import cache
-
 from app.hotels.dao import HotelsDAO
 from app.hotels.rooms.schemas import SRoomList
 from app.hotels.schemas import HotelsListOutput, SHotelCreate, SHotels
 from app.users.dependencies import get_current_user
 from app.users.models import Users
 
-router = APIRouter(prefix='/hotels', tags=['Hotels'])
+router = APIRouter(prefix="/hotels", tags=["Hotels"])
 
 
 @router.get("/{location}")
 # @cache(expire=60)
-async def get_hotels(location: str, date_from: date, date_to: date) -> list[HotelsListOutput]:
+async def get_hotels(
+    location: str, date_from: date, date_to: date
+) -> list[HotelsListOutput]:
     return await HotelsDAO.find_all(location, date_from, date_to)
 
 
@@ -35,5 +33,7 @@ async def delete_hotel(hotel_id: int, user: Users = Depends(get_current_user)):
 
 
 @router.get("/{hotel_id}/rooms")
-async def get_hotel_rooms(hotel_id: int, date_from: date, date_to: date) -> list[SRoomList]:
+async def get_hotel_rooms(
+    hotel_id: int, date_from: date, date_to: date
+) -> list[SRoomList]:
     return await HotelsDAO.get_hotel_rooms(hotel_id, date_from, date_to)

@@ -44,14 +44,16 @@ class BookingDAO(BaseDAO):
                 get_rooms_left = (
                     select(
                         (
-                                Rooms.quantity
-                                - func.count(booked_rooms.c.room_id).filter(
-                            booked_rooms.c.room_id.is_not(None)
-                        )
+                            Rooms.quantity
+                            - func.count(booked_rooms.c.room_id).filter(
+                                booked_rooms.c.room_id.is_not(None)
+                            )
                         ).label("rooms_left")
                     )
                     .select_from(Rooms)
-                    .join(booked_rooms, booked_rooms.c.room_id == Rooms.id, isouter=True)
+                    .join(
+                        booked_rooms, booked_rooms.c.room_id == Rooms.id, isouter=True
+                    )
                     .where(Rooms.id == room_id)
                     .group_by(Rooms.quantity, booked_rooms.c.room_id)
                 )
@@ -85,14 +87,16 @@ class BookingDAO(BaseDAO):
             elif isinstance(e, Exception):
                 msg = "Unknown Exc"
             msg += ": Cannot add booking"
-            logger.error(msg, extra={
-                "user_id": user_id,
-                "room_id": room_id,
-                "date_from": date_from,
-                "date_to": date_to,
-
-            }, exc_info=True
-                         )
+            logger.error(
+                msg,
+                extra={
+                    "user_id": user_id,
+                    "room_id": room_id,
+                    "date_from": date_from,
+                    "date_to": date_to,
+                },
+                exc_info=True,
+            )
 
     @classmethod
     async def find_all(cls, user_id: int):

@@ -16,6 +16,6 @@ def create_booking_confirmation_template(booking: dict, email_to: EmailStr):
         <h1>Confirm your reservation</h1>
         You have booked a room from {booking["date_from"]} to {booking["date_to"]}
         """,
-        subtype="html"
+        subtype="html",
     )
     return email

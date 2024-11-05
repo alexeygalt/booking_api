@@ -6,3 +6,6 @@ class SUserAuth(BaseModel):
     password: str
 
 
+class UserMeSchema(BaseModel):
+    id: int
+    email: str

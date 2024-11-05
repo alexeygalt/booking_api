@@ -1,15 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, Response, status
-
+from fastapi import APIRouter, Depends, Response
 from app.exceptions import IncorrectEmailOrPasswordException, UserAlreadyExistsException
 from app.users.auth import authenticate_user, create_access_token, get_password_hash
 from app.users.dao import UsersDAO
 from app.users.dependencies import get_current_user
-from app.users.schemas import SUserAuth
+from app.users.schemas import SUserAuth, UserMeSchema
 
-router = APIRouter(
-    prefix='/auth',
-    tags=["Auth"]
-)
+router = APIRouter(prefix="/auth", tags=["Auth"])
 
 
 @router.post("/register")
@@ -38,6 +34,6 @@ async def logout_user(response: Response):
     response.delete_cookie("booking_access_token")
 
 
-@router.get("/me")
+@router.get("/me", response_model=UserMeSchema)
 async def read_users_me(current_user=Depends(get_current_user)):
     return current_user

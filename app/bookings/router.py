@@ -1,8 +1,7 @@
-from datetime import date, timedelta
+from datetime import timedelta
 
 from fastapi import APIRouter, Depends, Response
 from fastapi.responses import JSONResponse
-from pydantic import parse_obj_as
 
 from app.bookings.dao import BookingDAO
 from app.bookings.schemas import SBooking, SBookingList, SNewBooking
@@ -11,7 +10,7 @@ from app.tasks.tasks import send_booking_confirmation_email
 from app.users.dependencies import get_current_user
 from app.users.models import Users
 
-router = APIRouter(prefix='/bookings', tags=['Bookings'])
+router = APIRouter(prefix="/bookings", tags=["Bookings"])
 
 
 # @router.post("")
@@ -24,10 +23,12 @@ router = APIRouter(prefix='/bookings', tags=['Bookings'])
 #         raise RoomCannotBeBooked
 @router.post("", status_code=201)
 async def add_booking(
-        booking: SNewBooking,
-        user: Users = Depends(get_current_user),
+    booking: SNewBooking,
+    user: Users = Depends(get_current_user),
 ):
-    if (booking.date_from >= booking.date_to) or (booking.date_to - booking.date_from > timedelta(days=30)):
+    if (booking.date_from >= booking.date_to) or (
+        booking.date_to - booking.date_from > timedelta(days=30)
+    ):
         raise InvalidDateToBooking
     booking = await BookingDAO.add(
         user.id,
@@ -47,7 +48,9 @@ async def add_booking(
 
 
 @router.get("")
-async def get_all_bookings(user: Users = Depends(get_current_user)) -> list[SBookingList]:
+async def get_all_bookings(
+    user: Users = Depends(get_current_user),
+) -> list[SBookingList]:
     return await BookingDAO.find_all(user_id=user.id)
 
 

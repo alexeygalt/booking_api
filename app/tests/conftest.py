@@ -3,7 +3,6 @@ import json
 from datetime import datetime
 
 import pytest
-from fastapi.testclient import TestClient
 from httpx import AsyncClient
 from sqlalchemy import insert
 
@@ -28,10 +27,10 @@ async def prepare_database():
         with open(f"app/tests/mock_{model}.json", encoding="utf-8") as file:
             return json.load(file)
 
-    hotels = open_mock_json('hotels')
-    rooms = open_mock_json('rooms')
-    users = open_mock_json('users')
-    bookings = open_mock_json('bookings')
+    hotels = open_mock_json("hotels")
+    rooms = open_mock_json("rooms")
+    users = open_mock_json("users")
+    bookings = open_mock_json("bookings")
 
     for booking in bookings:
         booking["date_from"] = datetime.strptime(booking["date_from"], "%Y-%m-%d")
@@ -60,17 +59,20 @@ def event_loop(request):
 
 @pytest.fixture(scope="function")
 async def ac():
-    async with AsyncClient(app=fastapi_app, base_url='http://test') as ac:
+    async with AsyncClient(app=fastapi_app, base_url="http://test") as ac:
         yield ac
 
 
 @pytest.fixture(scope="session")
 async def authenticated_ac():
-    async with AsyncClient(app=fastapi_app, base_url='http://test') as ac:
-        await ac.post("auth/login", json={
-            "email": "test@test.com",
-            "password": "test",
-        })
+    async with AsyncClient(app=fastapi_app, base_url="http://test") as ac:
+        await ac.post(
+            "auth/login",
+            json={
+                "email": "test@test.com",
+                "password": "test",
+            },
+        )
         assert ac.cookies["booking_access_token"]
         yield ac
 

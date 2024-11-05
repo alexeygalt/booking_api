@@ -1,13 +1,13 @@
 from datetime import date
 
-from sqlalchemy import Computed, Date, ForeignKey, Integer
+from sqlalchemy import Computed, Date, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
 
 
 class Bookings(Base):
-    __tablename__ = 'bookings'
+    __tablename__ = "bookings"
     # id = Column(Integer, primary_key=True)
     # room_id = Column(ForeignKey("rooms.id"))
     # user_id = Column(ForeignKey("users.id"))
@@ -27,7 +27,7 @@ class Bookings(Base):
     total_days: Mapped[int] = mapped_column(Computed("date_to - date_from"))
 
     user = relationship("Users", back_populates="booking")
-    room = relationship("Rooms", back_populates='booking')
+    room = relationship("Rooms", back_populates="booking")
 
     def __str__(self):
         return f"Booking #{self.id}"

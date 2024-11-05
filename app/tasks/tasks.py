@@ -21,9 +21,10 @@ def process_pic(path: str):
 
 @celery.task
 def send_booking_confirmation_email(booking: dict, email_to: EmailStr):
-    msq_content = create_booking_confirmation_template(booking=booking, email_to=email_to)
+    msq_content = create_booking_confirmation_template(
+        booking=booking, email_to=email_to
+    )
 
     with smtplib.SMTP_SSL(settings.EMAIL_HOST, settings.EMAIL_PORT) as server:
         server.login(settings.EMAIL_HOST_USER, settings.EMAIL_HOST_PASSWORD)
         server.send_message(msq_content)
-

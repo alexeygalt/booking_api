@@ -22,9 +22,7 @@ def get_token(request: Request):
 
 async def get_current_user(token: str = Depends(get_token)):
     try:
-        payload = jwt.decode(
-            token, settings.SECRET_KEY, settings.ALGORITHM
-        )
+        payload = jwt.decode(token, settings.SECRET_KEY, settings.ALGORITHM)
     except JWTError:
         raise IncorrectTokenFormatException
 
@@ -38,6 +36,3 @@ async def get_current_user(token: str = Depends(get_token)):
     if not user:
         raise UserIsNotPresentException
     return user
-
-
-

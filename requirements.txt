@@ -22,10 +22,12 @@ ecdsa==0.18.0
 email-validator==2.1.0.post1
 fastapi==0.104.1
 fastapi-cache2==0.2.1
+fastapi-versioning==0.10.0
 flake8==6.1.0
 flower==2.0.1
 frozenlist==1.4.0
 greenlet==3.0.1
+gunicorn==23.0.0
 h11==0.14.0
 httpcore==1.0.2
 httptools==0.6.1

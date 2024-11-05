@@ -165,6 +165,7 @@ cython_debug/
 .idea
 
 app/.env
+.env-non-dev
 media/
 #static/
 http:/

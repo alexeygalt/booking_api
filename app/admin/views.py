@@ -7,7 +7,7 @@ from app.users.models import Users
 
 
 class UsersAdmin(ModelView, model=Users):
-    column_list = [Users.id, Users.email,Users.booking]
+    column_list = [Users.id, Users.email, Users.booking]
     can_delete = False
     name = "User"
     name_plural = "Users"

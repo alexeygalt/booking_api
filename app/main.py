@@ -43,7 +43,12 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
     allow_methods=["GET", "POST", "OPTIONS", "DELETE", "PATH", "PUT"],
-    allow_headers=["Content-Type", "Set-Cookie", "Access-Control-Allow-Headers", "Access-Authorization"]
+    allow_headers=[
+        "Content-Type",
+        "Set-Cookie",
+        "Access-Control-Allow-Headers",
+        "Access-Authorization",
+    ],
 )
 
 # @app.on_event("startup")
@@ -65,9 +70,7 @@ async def add_process_time_header(request: Request, call_next):
     start_time = time.time()
     response = await call_next(request)
     process_time = time.time() - start_time
-    logger.info("Request handling time", extra={
-        "process_time": round(process_time, 4)
-    })
+    logger.info("Request handling time", extra={"process_time": round(process_time, 4)})
     return response
 
 
